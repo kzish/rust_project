@@ -1,6 +1,6 @@
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate diesel;
-#[macro_use] extern crate diesel_codegen;
+// #[macro_use] extern crate diesel_codegen;
 #[macro_use] extern crate dotenv;
 
 use dotenv::dotenv;
@@ -14,15 +14,6 @@ mod models;
 //use rocket::response::content;
 use rocket::serde::json::Json;
 
-#[cfg(test)]
-use diesel::debug_query;
-use diesel::insert_into;
-
-#[cfg(test)]
-use diesel::mysql::MySql;
-use diesel::prelude::*;
-use std::error::Error;
-use std::time::SystemTime;
 
 
 
@@ -83,6 +74,23 @@ fn updateTodo() -> &'static str {
 
 #[launch]
 fn rocket() -> _ {
+
+    dotenv.ok();
+
+    let database_url = env::var("DATABASE_URL").expect("set DATABASE_URL");
+    let conn = MySqlConnection::establish(&database_url).unwrap();
+
+    let task = models::newTask {
+        description: String::from("this is my first rust task"),
+        done: true
+    };
+
+    if models::task::insert(task, &conn) {
+        println!("success");
+    } else {
+        println!("failed")
+    }
+
     rocket::build()
     .mount("/", routes![
         getTodos, 

@@ -1,7 +1,15 @@
+#![feature(plugin, custom_derive, const_fn, decl_macro)]
+#![plugin(rocket_codegen)]
+
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate diesel;
-// #[macro_use] extern crate diesel_codegen;
+#[macro_use] extern crate diesel_codegen;
 #[macro_use] extern crate dotenv;
+#[macro_use] extern crate r2d2;
+#[macro_use] extern crate r2d2_deisel;
+#[macro_use] extern crate rocket_contrib;
+#[macro_use] extern crate serde_derive;
+#[macro_use] extern crate serde_json;
 
 use dotenv::dotenv;
 use std::env;

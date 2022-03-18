@@ -1,18 +1,21 @@
 use diesel;
 use diesel::prelude::*;
 use diesel::mysql::MysqlConnection;
+#[macro_use]
+extern crate schema;
 
 use schema::tasks;//brings the tasks table into scope
 use schema::tasks::dsl::tasks as all_tasks;
 
-#[derive(Queryable)]
+#[derive(Queryable, AsChangeset, Serialize, Deserialize, Debug)]
+#[table_name = "tasks"]
 pub struct task {
     pub id: i32,
     pub description: String,
     pub done: bool,
 }
 
-#[derive(Insertable)]
+#[derive(Insertable, Serialize, Deserialize)]
 // #[table_name("tasks")]
 pub struct newTask {
     pub description: String,
